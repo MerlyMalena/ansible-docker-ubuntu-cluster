@@ -1,0 +1,34 @@
+---
+- name: Automatizacion de servidores Ubuntu con Ansible
+  hosts: servidores
+  become: true
+
+  tasks:
+    - name: Actualizar la cache de APT
+      apt:
+        update_cache: yes
+
+    - name: Crear el usuario 'itla'
+      user:
+        name: itla
+        state: present
+        shell: /bin/bash
+
+    - name: Crear la carpeta 'app'
+      file:
+        path: /app
+        state: directory
+        mode: '0755'
+
+    - name: Crear el archivo 'hola.txt' dentro de /app
+      copy:
+        dest: /app/hola.txt
+        content: "Hola desde Ansible!\n"
+        mode: '0644'
+
+    - name: Instalar las aplicaciones cowsay y htop
+      apt:
+        name:
+          - cowsay
+          - htop
+        state: present
